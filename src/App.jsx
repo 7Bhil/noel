@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
 import { SnowCanvas } from './components/canvas/SnowCanvas'
 import { NoelHeroSection } from './components/sections/NoelHeroSection'
+import { InteractiveTreeSection } from './components/sections/InteractiveTreeSection'
+import { WishlistLetterSection } from './components/sections/WishlistLetterSection'
 import { NoelShopSection } from './components/sections/NoelShopSection'
 import { NoelCartDrawer } from './components/common/NoelCartDrawer'
-import { ShoppingBag, Sparkles, Heart } from 'lucide-react'
+import { ShoppingBag, TreePine, Mail, Gift } from 'lucide-react'
 import { noelAudio } from './utils/noelAudio'
 
 const STORAGE_KEY_NOEL_CART = 'noel_boreal_cart_2026'
@@ -74,8 +76,8 @@ export default function App() {
     setCartItems([])
   }
 
-  const handleScrollToShop = () => {
-    document.getElementById('boutique')?.scrollIntoView({ behavior: 'smooth' })
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
   }
 
   const totalQuantity = cartItems.reduce((acc, i) => acc + i.quantity, 0)
@@ -83,8 +85,39 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen bg-nuit-900 text-neige font-sans selection:bg-dore selection:text-nuit-900 overflow-x-hidden">
-      {/* Chute de neige en arrière-plan */}
+      {/* Chute de neige féérique en arrière-plan */}
       <SnowCanvas />
+
+      {/* Barre de navigation féérique en haut */}
+      <nav
+        aria-label="Navigation du village"
+        className="fixed top-6 left-6 z-40 hidden md:flex items-center gap-2 p-1.5 rounded-full bg-nuit-800/80 border border-neige/15 backdrop-blur-md text-xs font-sans"
+      >
+        <button
+          type="button"
+          onClick={() => scrollTo('sapin-enchante')}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-sapin/60 hover:text-dore transition-colors"
+        >
+          <TreePine className="w-3.5 h-3.5 text-dore" />
+          <span>Le Sapin</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => scrollTo('lettre-au-pere-noel')}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-nuit-700 hover:text-dore transition-colors"
+        >
+          <Mail className="w-3.5 h-3.5 text-dore" />
+          <span>La Boîte aux Vœux</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => scrollTo('boutique')}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-nuit-700 hover:text-dore transition-colors"
+        >
+          <Gift className="w-3.5 h-3.5 text-dore" />
+          <span>L&apos;Atelier Cadeaux</span>
+        </button>
+      </nav>
 
       {/* Bouton Panier Flottant avec badge réactif */}
       <button
@@ -118,21 +151,25 @@ export default function App() {
         onClearCart={handleClearCart}
       />
 
-      {/* Contenu principal */}
+      {/* Parcours immersif complet de Noël */}
       <main className="relative z-10">
         <NoelHeroSection
-          onExploreShop={handleScrollToShop}
+          onExploreShop={() => scrollTo('boutique')}
+          onExploreTree={() => scrollTo('sapin-enchante')}
+          onExploreLetter={() => scrollTo('lettre-au-pere-noel')}
           isPlayingSound={isPlayingSound}
           onToggleSound={handleToggleSound}
         />
+        <InteractiveTreeSection />
+        <WishlistLetterSection />
         <NoelShopSection onAddToCart={handleAddToCart} />
       </main>
 
-      {/* Pied de page féérique */}
+      {/* Pied de page chaleureux */}
       <footer className="relative z-10 border-t border-neige/10 py-12 px-6 text-center space-y-3 bg-nuit-900/80 backdrop-blur-md">
-        <div className="flex items-center justify-center gap-1.5 text-xs text-neige-dim font-light">
-          <span>Créé pour la féérie de Noël 2026 &bull; Le Village Boréal</span>
-        </div>
+        <p className="text-xs text-neige-dim font-light">
+          Créé pour perpétuer la magie et la chaleur de Noël 2026 &bull; Le Village Boréal
+        </p>
         <p className="text-[11px] text-neige-dim/50 font-mono">
           Tarification en Franc CFA (XOF) &bull; Expédition féérique offerte dès 40 000 XOF
         </p>
